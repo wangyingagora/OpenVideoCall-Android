@@ -144,6 +144,10 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
             public void onItemDoubleClick(View v, Object item) {
                 log.debug("onItemDoubleClick " + v + " " + item + " " + mLayoutType);
 
+                if (mUidsList.size() < 2) {
+                    return;
+                }
+
                 UserStatusData user = (UserStatusData) item;
                 int uid = (user.mUid == 0) ? config().mUid : user.mUid;
 

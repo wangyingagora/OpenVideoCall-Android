@@ -1,7 +1,6 @@
 package io.agora.openvcall.model;
 
 import io.agora.rtc.Constants;
-import io.agora.rtc.IRtcEngineEventHandler;
 
 public class ConstantApp {
     public static final String APP_BUILD_DATE = "today";
@@ -14,7 +13,7 @@ public class ConstantApp {
     public static final int MAX_PEER_COUNT = 4;
 
     // please check details string_array_resolutions/string_array_frame_rate/string_array_bit_rate at strings_config.xml
-    public static int[] VIDEO_PROFILES = new int[]{IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_120P,
+    public static int[] VIDEO_PROFILES = new int[]{Constants.VIDEO_PROFILE_120P,
             Constants.VIDEO_PROFILE_180P,
             Constants.VIDEO_PROFILE_240P,
             Constants.VIDEO_PROFILE_360P,

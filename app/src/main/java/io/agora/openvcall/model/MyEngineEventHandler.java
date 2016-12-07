@@ -118,7 +118,7 @@ public class MyEngineEventHandler {
 
         @Override
         public void onError(int error) {
-            log.debug("onError " + error);
+            log.debug("onError " + error + " " + RtcEngine.getErrorDescription(error));
 
             Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
             while (it.hasNext()) {

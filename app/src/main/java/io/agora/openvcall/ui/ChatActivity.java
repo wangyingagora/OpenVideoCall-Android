@@ -392,22 +392,6 @@ public class ChatActivity extends BaseActivity implements AGEventHandler, IHeads
     public void onEndCallClicked(View view) {
         log.info("onEndCallClicked " + view);
 
-        quitCall();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-        log.info("onBackPressed");
-
-        quitCall();
-    }
-
-    private void quitCall() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-
         finish();
     }
 

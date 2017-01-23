@@ -187,6 +187,17 @@ public class MyEngineEventHandler {
             log.debug("onRejoinChannelSuccess " + channel + " " + uid + " " + elapsed);
         }
 
+        @Override
+        public void onAudioRouteChanged(int routing) {
+            log.debug("onAudioRouteChanged " + routing);
+
+            Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
+            while (it.hasNext()) {
+                AGEventHandler handler = it.next();
+                handler.onExtraCallback(AGEventHandler.EVENT_TYPE_ON_AUDIO_ROUTE_CHANGED, routing);
+            }
+        }
+
         public void onWarning(int warn) {
             log.debug("onWarning " + warn);
         }

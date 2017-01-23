@@ -153,6 +153,7 @@ public class WorkerThread extends Thread {
 
         if (mRtcEngine != null) {
             mRtcEngine.leaveChannel();
+            mRtcEngine.enableVideo();
         }
 
         disablePreProcessor();

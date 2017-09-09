@@ -30,7 +30,7 @@ Agora 视频 SDK 支持 iOS / Android / Windows / macOS 等多个平台，你可
 <string name="private_app_id"><#YOUR APP ID#></string>
 ```
 
-然后在 [Agora.io SDK](https://www.agora.io/cn/download/) 下载 **视频通话 + 直播 SDK**，解压后将其中的 **libs** 文件夹下的 ***.jar** 复制到本项目的 **app/libs** 下，其中的 **libs** 文件夹下的 **arm64-v8a**/**x86**/**armeabi-v7a** 复制到本项目的 **app/src/main/libs** 下。
+然后在 [Agora.io SDK](https://www.agora.io/cn/download/) 下载 **视频通话 + 直播 SDK**，解压后将其中的 **libs** 文件夹下的 ***.jar** 复制到本项目的 **app/libs** 下，其中的 **libs** 文件夹下的 **arm64-v8a**/**x86**/**armeabi-v7a** 复制到本项目的 **app/src/main/libs** 下，其中的 **libs**/**include** 文件夹下的 **IAgoraMediaEngine.h**/**IAgoraRtcEngine.h** 复制到本项目的 **app**/**src**/**main**/**cpp**/**agora** 下。
 
 最后用 Android Studio 打开该项目，连上设备，编译并运行。
 

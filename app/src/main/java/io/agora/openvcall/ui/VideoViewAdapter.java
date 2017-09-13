@@ -33,9 +33,9 @@ public abstract class VideoViewAdapter extends RecyclerView.Adapter<RecyclerView
 
     protected int mLocalUid;
 
-    public VideoViewAdapter(Context context, int localUid, HashMap<Integer, SurfaceView> uids, VideoViewEventListener listener) {
-        mContext = context;
-        mInflater = ((Activity) context).getLayoutInflater();
+    public VideoViewAdapter(Activity activity, int localUid, HashMap<Integer, SurfaceView> uids, VideoViewEventListener listener) {
+        mInflater = ((Activity) activity).getLayoutInflater();
+        mContext = ((Activity) activity).getApplicationContext();
 
         mLocalUid = localUid;
 

@@ -121,7 +121,7 @@ public class ChatActivity extends BaseActivity implements AGEventHandler {
 
         mUidsList.put(0, surfaceV); // get first surface view
 
-        mGridVideoViewContainer.initViewContainer(getApplicationContext(), 0, mUidsList); // first is now full view
+        mGridVideoViewContainer.initViewContainer(this, 0, mUidsList); // first is now full view
         worker().preview(true, surfaceV, 0);
 
         worker().joinChannel(channelName, config().mUid);
@@ -159,7 +159,7 @@ public class ChatActivity extends BaseActivity implements AGEventHandler {
         mMsgAdapter = new InChannelMessageListAdapter(this, mMsgList);
         mMsgAdapter.setHasStableIds(true);
         msgListView.setAdapter(mMsgAdapter);
-        msgListView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        msgListView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
         msgListView.addItemDecoration(new MessageListDecoration());
     }
 
@@ -214,7 +214,7 @@ public class ChatActivity extends BaseActivity implements AGEventHandler {
     }
 
     private int getVideoProfileIndex() {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         int profileIndex = pref.getInt(ConstantApp.PrefManager.PREF_PROPERTY_PROFILE_IDX, ConstantApp.DEFAULT_PROFILE_IDX);
         if (profileIndex > ConstantApp.VIDEO_PROFILES.length - 1) {
             profileIndex = ConstantApp.DEFAULT_PROFILE_IDX;
@@ -660,7 +660,7 @@ public class ChatActivity extends BaseActivity implements AGEventHandler {
         if (mSmallVideoViewDock != null) {
             mSmallVideoViewDock.setVisibility(View.GONE);
         }
-        mGridVideoViewContainer.initViewContainer(getApplicationContext(), config().mUid, mUidsList);
+        mGridVideoViewContainer.initViewContainer(this, config().mUid, mUidsList);
 
         mLayoutType = LAYOUT_TYPE_DEFAULT;
     }
@@ -668,7 +668,7 @@ public class ChatActivity extends BaseActivity implements AGEventHandler {
     private void switchToSmallVideoView(int bigBgUid) {
         HashMap<Integer, SurfaceView> slice = new HashMap<>(1);
         slice.put(bigBgUid, mUidsList.get(bigBgUid));
-        mGridVideoViewContainer.initViewContainer(getApplicationContext(), bigBgUid, slice);
+        mGridVideoViewContainer.initViewContainer(this, bigBgUid, slice);
 
         bindToSmallVideoView(bigBgUid);
 
@@ -710,9 +710,9 @@ public class ChatActivity extends BaseActivity implements AGEventHandler {
         log.debug("bindToSmallVideoView " + twoWayVideoCall + " " + (exceptUid & 0xFFFFFFFFL));
 
         if (twoWayVideoCall) {
-            recycler.setLayoutManager(new RtlLinearLayoutManager(this, RtlLinearLayoutManager.HORIZONTAL, false));
+            recycler.setLayoutManager(new RtlLinearLayoutManager(getApplicationContext(), RtlLinearLayoutManager.HORIZONTAL, false));
         } else {
-            recycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+            recycler.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
         }
         recycler.addItemDecoration(new SmallVideoViewDecoration());
         recycler.setAdapter(mSmallVideoViewAdapter);

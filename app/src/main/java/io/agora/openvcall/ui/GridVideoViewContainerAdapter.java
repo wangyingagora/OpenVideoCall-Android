@@ -1,5 +1,6 @@
 package io.agora.openvcall.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -18,8 +19,8 @@ import io.agora.propeller.UserStatusData;
 public class GridVideoViewContainerAdapter extends VideoViewAdapter {
     private final static Logger log = LoggerFactory.getLogger(GridVideoViewContainerAdapter.class);
 
-    public GridVideoViewContainerAdapter(Context context, int localUid, HashMap<Integer, SurfaceView> uids, VideoViewEventListener listener) {
-        super(context, localUid, uids, listener);
+    public GridVideoViewContainerAdapter(Activity activity, int localUid, HashMap<Integer, SurfaceView> uids, VideoViewEventListener listener) {
+        super(activity, localUid, uids, listener);
         log.debug("GridVideoViewContainerAdapter " + (mLocalUid & 0xFFFFFFFFL));
     }
 

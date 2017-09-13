@@ -1,27 +1,25 @@
 package io.agora.openvcall.ui;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import io.agora.openvcall.R;
-import io.agora.openvcall.model.Message;
 
 import java.util.ArrayList;
+
+import io.agora.openvcall.R;
+import io.agora.openvcall.model.Message;
 
 public class InChannelMessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<Message> mMsglist;
 
-    private final Context mContext;
     protected final LayoutInflater mInflater;
 
-    public InChannelMessageListAdapter(Context context, ArrayList<Message> list) {
-        mContext = context;
-        mInflater = ((Activity) context).getLayoutInflater();
+    public InChannelMessageListAdapter(Activity activity, ArrayList<Message> list) {
+        mInflater = activity.getLayoutInflater();
         mMsglist = list;
     }
 

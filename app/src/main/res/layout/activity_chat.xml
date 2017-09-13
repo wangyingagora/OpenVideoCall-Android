@@ -132,7 +132,7 @@
                     android:layout_weight="20"
                     android:background="@android:color/transparent"
                     android:inputType="text"
-                    android:singleLine="true"
+                    android:maxLines="1"
                     android:textColor="@android:color/white"
                     android:layout_height="match_parent"
                     android:hint="@string/msg_say_something"

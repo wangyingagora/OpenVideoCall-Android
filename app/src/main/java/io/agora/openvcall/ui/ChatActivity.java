@@ -2,6 +2,7 @@ package io.agora.openvcall.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import io.agora.openvcall.R;
 import io.agora.openvcall.model.AGEventHandler;
@@ -48,20 +50,23 @@ import io.agora.rtc.video.VideoCanvas;
 
 public class ChatActivity extends BaseActivity implements AGEventHandler {
 
+    public static final int LAYOUT_TYPE_DEFAULT = 0;
+    public static final int LAYOUT_TYPE_SMALL = 1;
     private final static Logger log = LoggerFactory.getLogger(ChatActivity.class);
-
-    private GridVideoViewContainer mGridVideoViewContainer;
-
-    private RelativeLayout mSmallVideoViewDock;
-
     // should only be modified under UI thread
     private final HashMap<Integer, SurfaceView> mUidsList = new HashMap<>(); // uid = 0 || uid == EngineConfig.mUid
-
+    public int mLayoutType = LAYOUT_TYPE_DEFAULT;
+    private GridVideoViewContainer mGridVideoViewContainer;
+    private RelativeLayout mSmallVideoViewDock;
     private volatile boolean mVideoMuted = false;
-
     private volatile boolean mAudioMuted = false;
-
     private volatile int mAudioRouting = -1; // Default
+    private boolean mIsLandscape = false;
+    private InChannelMessageListAdapter mMsgAdapter;
+    private ArrayList<Message> mMsgList;
+    private int mDataStreamId;
+    private VideoPreProcessing mVideoPreProcessing;
+    private SmallVideoViewAdapter mSmallVideoViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +93,6 @@ public class ChatActivity extends BaseActivity implements AGEventHandler {
         String channelName = i.getStringExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME);
 
         final String encryptionKey = getIntent().getStringExtra(ConstantApp.ACTION_KEY_ENCRYPTION_KEY);
-
         final String encryptionMode = getIntent().getStringExtra(ConstantApp.ACTION_KEY_ENCRYPTION_MODE);
 
         doConfigEngine(encryptionKey, encryptionMode);
@@ -121,7 +125,7 @@ public class ChatActivity extends BaseActivity implements AGEventHandler {
 
         mUidsList.put(0, surfaceV); // get first surface view
 
-        mGridVideoViewContainer.initViewContainer(this, 0, mUidsList); // first is now full view
+        mGridVideoViewContainer.initViewContainer(this, 0, mUidsList, mIsLandscape); // first is now full view
         worker().preview(true, surfaceV, 0);
 
         worker().joinChannel(channelName, config().mUid);
@@ -148,10 +152,6 @@ public class ChatActivity extends BaseActivity implements AGEventHandler {
         findViewById(R.id.bottom_action_container).setVisibility(View.VISIBLE);
     }
 
-    private InChannelMessageListAdapter mMsgAdapter;
-
-    private ArrayList<Message> mMsgList;
-
     private void initMessageList() {
         mMsgList = new ArrayList<>();
         RecyclerView msgListView = (RecyclerView) findViewById(R.id.msg_list);
@@ -177,8 +177,6 @@ public class ChatActivity extends BaseActivity implements AGEventHandler {
 
         mMsgAdapter.notifyDataSetChanged();
     }
-
-    private int mDataStreamId;
 
     private void sendChannelMsg(String msgStr) {
         RtcEngine rtcEngine = rtcEngine();
@@ -310,8 +308,6 @@ public class ChatActivity extends BaseActivity implements AGEventHandler {
 
         finish();
     }
-
-    private VideoPreProcessing mVideoPreProcessing;
 
     public void onBtnNClicked(View view) {
         if (mVideoPreProcessing == null) {
@@ -451,10 +447,10 @@ public class ChatActivity extends BaseActivity implements AGEventHandler {
                 SurfaceView surfaceV = RtcEngine.CreateRendererView(getApplicationContext());
                 mUidsList.put(uid, surfaceV);
 
-                boolean useDefaultLayout = mLayoutType == LAYOUT_TYPE_DEFAULT && mUidsList.size() != 2;
+                boolean useDefaultLayout = mLayoutType == LAYOUT_TYPE_DEFAULT;
 
-                surfaceV.setZOrderOnTop(!useDefaultLayout);
-                surfaceV.setZOrderMediaOverlay(!useDefaultLayout);
+                surfaceV.setZOrderOnTop(true);
+                surfaceV.setZOrderMediaOverlay(true);
 
                 rtcEngine().setupRemoteVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));
 
@@ -614,9 +610,9 @@ public class ChatActivity extends BaseActivity implements AGEventHandler {
             }
 
             case AGEventHandler.EVENT_TYPE_ON_AUDIO_ROUTE_CHANGED:
-                 notifyHeadsetPlugged((int) data[0]);
+                notifyHeadsetPlugged((int) data[0]);
 
-                 break;
+                break;
 
         }
     }
@@ -654,13 +650,11 @@ public class ChatActivity extends BaseActivity implements AGEventHandler {
         });
     }
 
-    private SmallVideoViewAdapter mSmallVideoViewAdapter;
-
     private void switchToDefaultVideoView() {
         if (mSmallVideoViewDock != null) {
             mSmallVideoViewDock.setVisibility(View.GONE);
         }
-        mGridVideoViewContainer.initViewContainer(this, config().mUid, mUidsList);
+        mGridVideoViewContainer.initViewContainer(this, config().mUid, mUidsList, mIsLandscape);
 
         mLayoutType = LAYOUT_TYPE_DEFAULT;
     }
@@ -668,7 +662,17 @@ public class ChatActivity extends BaseActivity implements AGEventHandler {
     private void switchToSmallVideoView(int bigBgUid) {
         HashMap<Integer, SurfaceView> slice = new HashMap<>(1);
         slice.put(bigBgUid, mUidsList.get(bigBgUid));
-        mGridVideoViewContainer.initViewContainer(this, bigBgUid, slice);
+        Iterator<SurfaceView> iterator = mUidsList.values().iterator();
+        while (iterator.hasNext()) {
+            SurfaceView s = iterator.next();
+            s.setZOrderOnTop(true);
+            s.setZOrderMediaOverlay(true);
+        }
+
+        mUidsList.get(bigBgUid).setZOrderOnTop(false);
+        mUidsList.get(bigBgUid).setZOrderMediaOverlay(false);
+
+        mGridVideoViewContainer.initViewContainer(this, bigBgUid, slice, mIsLandscape);
 
         bindToSmallVideoView(bigBgUid);
 
@@ -676,12 +680,6 @@ public class ChatActivity extends BaseActivity implements AGEventHandler {
 
         requestRemoteStreamType(mUidsList.size());
     }
-
-    public int mLayoutType = LAYOUT_TYPE_DEFAULT;
-
-    public static final int LAYOUT_TYPE_DEFAULT = 0;
-
-    public static final int LAYOUT_TYPE_SMALL = 1;
 
     private void bindToSmallVideoView(int exceptUid) {
         if (mSmallVideoViewDock == null) {
@@ -742,6 +740,17 @@ public class ChatActivity extends BaseActivity implements AGEventHandler {
             iv.setColorFilter(getResources().getColor(R.color.agora_blue), PorterDuff.Mode.MULTIPLY);
         } else {
             iv.clearColorFilter();
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mIsLandscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
+        if (mLayoutType == LAYOUT_TYPE_DEFAULT) {
+            switchToDefaultVideoView();
+        } else if (mSmallVideoViewAdapter != null) {
+            switchToSmallVideoView(mSmallVideoViewAdapter.getExceptedUid());
         }
     }
 }

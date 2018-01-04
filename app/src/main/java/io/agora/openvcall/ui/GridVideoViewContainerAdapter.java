@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 
-import io.agora.openvcall.model.ConstantApp;
 import io.agora.propeller.UserStatusData;
 
 public class GridVideoViewContainerAdapter extends VideoViewAdapter {
@@ -36,16 +35,29 @@ public class GridVideoViewContainerAdapter extends VideoViewAdapter {
             int count = uids.size();
             int DividerX = 1;
             int DividerY = 1;
+
             if (count == 2) {
                 DividerY = 2;
             } else if (count >= 3) {
-                DividerX = 2;
-                DividerY = 2;
+                DividerX = getNearestSqrt(count);
+                DividerY = (int) Math.ceil(count * 1.f / DividerX);
             }
 
-            mItemWidth = outMetrics.widthPixels / DividerX;
-            mItemHeight = outMetrics.heightPixels / DividerY;
+            int width = outMetrics.widthPixels;
+            int height = outMetrics.heightPixels;
+
+            if (width > height) {
+                mItemWidth = width / DividerY;
+                mItemHeight = height / DividerX;
+            } else {
+                mItemWidth = width / DividerX;
+                mItemHeight = height / DividerY;
+            }
         }
+    }
+
+    private int getNearestSqrt(int n) {
+        return (int) Math.sqrt(n);
     }
 
     @Override
@@ -70,11 +82,7 @@ public class GridVideoViewContainerAdapter extends VideoViewAdapter {
 
     @Override
     public int getItemCount() {
-        int sizeLimit = mUsers.size();
-        if (sizeLimit >= ConstantApp.MAX_PEER_COUNT + 1) {
-            sizeLimit = ConstantApp.MAX_PEER_COUNT + 1;
-        }
-        return sizeLimit;
+        return mUsers.size();
     }
 
     public UserStatusData getItem(int position) {

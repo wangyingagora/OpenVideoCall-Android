@@ -15,6 +15,9 @@ import io.agora.propeller.UserStatusData;
 import io.agora.propeller.VideoInfoData;
 
 public class GridVideoViewContainer extends RecyclerView {
+    private GridVideoViewContainerAdapter mGridVideoViewContainerAdapter;
+    private VideoViewEventListener mEventListener;
+
     public GridVideoViewContainer(Context context) {
         super(context);
     }
@@ -26,10 +29,6 @@ public class GridVideoViewContainer extends RecyclerView {
     public GridVideoViewContainer(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
-
-    private GridVideoViewContainerAdapter mGridVideoViewContainerAdapter;
-
-    private VideoViewEventListener mEventListener;
 
     public void setItemEventHandler(VideoViewEventListener listener) {
         this.mEventListener = listener;
@@ -44,7 +43,7 @@ public class GridVideoViewContainer extends RecyclerView {
         return false;
     }
 
-    public void initViewContainer(Activity activity, int localUid, HashMap<Integer, SurfaceView> uids) {
+    public void initViewContainer(Activity activity, int localUid, HashMap<Integer, SurfaceView> uids, boolean isLandscape) {
         boolean newCreated = initAdapter(activity, localUid, uids);
 
         if (!newCreated) {
@@ -54,14 +53,21 @@ public class GridVideoViewContainer extends RecyclerView {
 
         this.setAdapter(mGridVideoViewContainerAdapter);
 
+        int orientation = isLandscape ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL;
+
         int count = uids.size();
         if (count <= 2) { // only local full view or or with one peer
-            this.setLayoutManager(new LinearLayoutManager(activity.getApplicationContext(), RecyclerView.VERTICAL, false));
-        } else if (count > 2 && count <= 4) {
-            this.setLayoutManager(new GridLayoutManager(activity.getApplicationContext(), 2, RecyclerView.VERTICAL, false));
+            this.setLayoutManager(new LinearLayoutManager(activity.getApplicationContext(), orientation, false));
+        } else if (count > 2) {
+            int itemSpanCount = getNearestSqrt(count);
+            this.setLayoutManager(new GridLayoutManager(activity.getApplicationContext(), itemSpanCount, orientation, false));
         }
 
         mGridVideoViewContainerAdapter.notifyDataSetChanged();
+    }
+
+    private int getNearestSqrt(int n) {
+        return (int) Math.sqrt(n);
     }
 
     public void notifyUiChanged(HashMap<Integer, SurfaceView> uids, int localUid, HashMap<Integer, Integer> status, HashMap<Integer, Integer> volume) {

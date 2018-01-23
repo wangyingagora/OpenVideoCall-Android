@@ -25,13 +25,6 @@
             android:text="@string/label_title_frame_rate"
             android:gravity="center" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/label_title_bit_rate"
-            android:gravity="center" />
-
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

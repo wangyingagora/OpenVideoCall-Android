@@ -1,6 +1,6 @@
 # Open Video Call for Android
 
-*Read this in other languages: [English](README.en.md)*
+*Read this in other languages: [English](README.md)*
 
 这个开源示例项目演示了如何快速集成 Agora 视频 SDK，实现多人视频通话。
 

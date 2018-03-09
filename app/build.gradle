@@ -50,7 +50,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'io.agora.rtc:full-sdk:2.0.0'
     compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.android.support:support-v4:25.3.0'
     compile 'com.android.support:design:25.3.0'

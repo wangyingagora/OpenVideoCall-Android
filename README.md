@@ -36,7 +36,7 @@ Agora Video SDK supports iOS / Android / Windows / macOS etc. You can find demos
 
 First, add the address which can integrate the Agora Video SDK automatically through JCenter in the property of the dependence of the "app/build.gradle":
 ```
-compile 'io.agora.rtc:full-sdk:2.1.0'
+compile 'io.agora.rtc:full-sdk:2.2.0'
 ```
 (Adding the link address is the most important step if you want to integrate the Agora Video SDK in your own application.)
 

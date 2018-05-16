@@ -36,16 +36,16 @@ Agora 视频 SDK 支持 iOS / Android / Windows / macOS 等多个平台，你可
 第一步: 在项目对应的模块的 "app/build.gradle" 文件的依赖属性中加入通过 JCenter 自动集成 Agora 视频 SDK 的地址：
 
 ```
-compile 'io.agora.rtc:full-sdk:2.1.0'
+compile 'io.agora.rtc:full-sdk:2.2.0'
 ```
 
-(该示例程序已添加此链接地址，无需再添加，如果要在自己的应用中集成 Agora 视频 SDK，添加链接地址是最重要的一步。）
+(如果要在自己的应用中集成 Agora 视频 SDK，添加链接地址是最重要的一步。）
 
-第二步: 在 [Agora.io SDK](https://www.agora.io/cn/download/) 下载 **视频通话 + 直播 SDK**，解压后将其中的 **libs**/**include** 文件夹下的 **IAgoraMediaEngine.h**/**IAgoraRtcEngine.h** 复制到本项目的 **app**/**src**/**main**/**cpp**/**agora** 下。
+第二步: 在 [Agora.io SDK](https://www.agora.io/cn/download/) 下载 **视频通话 + 直播 SDK**，解压后将其中的 **libs**/**include** 文件夹下的 ***.h** 复制到本项目的 **app**/**src**/**main**/**cpp**/**agora** 下。
 
 - 次选集成方式：
 
-第一步: 在 [Agora.io SDK](https://www.agora.io/cn/download/) 下载 **视频通话 + 直播 SDK**，解压后将其中的 **libs** 文件夹下的 ***.jar** 复制到本项目的 **app/libs** 下，其中的 **libs** 文件夹下的 **arm64-v8a**/**x86**/**armeabi-v7a** 复制到本项目的 **app/src/main/jniLibs** 下，其中的 **libs**/**include** 文件夹下的 **IAgoraMediaEngine.h**/**IAgoraRtcEngine.h** 复制到本项目的 **app**/**src**/**main**/**cpp**/**agora** 下。
+第一步: 在 [Agora.io SDK](https://www.agora.io/cn/download/) 下载 **视频通话 + 直播 SDK**，解压后将其中的 **libs** 文件夹下的 ***.jar** 复制到本项目的 **app/libs** 下，其中的 **libs** 文件夹下的 **arm64-v8a**/**x86**/**armeabi-v7a** 复制到本项目的 **app/src/main/jniLibs** 下，其中的 **libs**/**include** 文件夹下的 ***.h** 复制到本项目的 **app**/**src**/**main**/**cpp**/**agora** 下。
 
 第二步: 在本项目的 "app/build.gradle" 文件依赖属性中添加如下依赖关系：
 

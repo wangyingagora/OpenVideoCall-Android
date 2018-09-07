@@ -37,7 +37,9 @@
                 android:digits="@string/legal_channel_name_characters"
                 android:gravity="center"
                 android:hint="@string/label_channel_name_hint"
-                android:inputType="text" />
+                android:text="1872947"
+                android:inputType="text"
+                android:focusable="false"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -57,7 +59,8 @@
                     android:digits="@string/legal_channel_name_characters"
                     android:gravity="center"
                     android:hint="@string/label_encryption_key_hint"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:focusable="false"/>
 
                 <Spinner
                     android:id="@+id/encryption_mode"
@@ -69,16 +72,31 @@
                     android:layout_marginRight="28dp" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/button_join"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="50dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="40dp"
-                android:onClick="onClickJoin"
-                android:enabled="false"
-                android:text="@string/label_join" />
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/button_alias"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textAllCaps="false"
+                    android:onClick="onClickName"
+                    android:text="Name" />
+                <Button
+                    android:id="@+id/button_join"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="false"
+                    android:onClick="onClickJoin"
+                    android:enabled="true"
+                    android:layout_weight="1"
+                    android:text="@string/label_join" />
+            </LinearLayout>
         </LinearLayout>
 
     </ScrollView>

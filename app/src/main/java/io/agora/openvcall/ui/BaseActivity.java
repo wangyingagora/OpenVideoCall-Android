@@ -75,7 +75,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     private boolean checkSelfPermissions() {
         return checkSelfPermission(Manifest.permission.RECORD_AUDIO, ConstantApp.PERMISSION_REQ_ID_RECORD_AUDIO) &&
                 checkSelfPermission(Manifest.permission.CAMERA, ConstantApp.PERMISSION_REQ_ID_CAMERA) &&
-                checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, ConstantApp.PERMISSION_REQ_ID_WRITE_EXTERNAL_STORAGE);
+                checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, ConstantApp.PERMISSION_REQ_ID_WRITE_EXTERNAL_STORAGE) &&
+                checkSelfPermission(Manifest.permission.READ_PHONE_STATE, ConstantApp.PERMISSION_REQ_ID_READ_PHONE_STATE);
     }
 
     @Override
@@ -178,6 +179,14 @@ public abstract class BaseActivity extends AppCompatActivity {
                 break;
             }
             case ConstantApp.PERMISSION_REQ_ID_WRITE_EXTERNAL_STORAGE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
+                    finish();
+                }
+                break;
+            }
+            case ConstantApp.PERMISSION_REQ_ID_READ_PHONE_STATE: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 } else {

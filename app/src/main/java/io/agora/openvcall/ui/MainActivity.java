@@ -1,5 +1,7 @@
 package io.agora.openvcall.ui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,8 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import io.agora.openvcall.AGApplication;
 import io.agora.openvcall.R;
 import io.agora.openvcall.model.ConstantApp;
 
@@ -40,9 +45,15 @@ public class MainActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 boolean isEmpty = TextUtils.isEmpty(s.toString());
-                findViewById(R.id.button_join).setEnabled(!isEmpty);
+                // findViewById(R.id.button_join).setEnabled(!isEmpty);
             }
         });
+
+        String alias = AGApplication.getCaller();
+        if (!TextUtils.isEmpty(alias)) {
+            ((Button) findViewById(R.id.button_alias)).setText(alias);
+            AGApplication.setAlias(alias);
+        }
 
         Spinner encryptionSpinner = (Spinner) findViewById(R.id.encryption_mode);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -104,7 +115,13 @@ public class MainActivity extends BaseActivity {
         forwardToRoom();
     }
 
+    public void onClickName(View view) {
+        setAlias();
+    }
+
     public void forwardToRoom() {
+        AGApplication.stopMusic();
+
         EditText v_channel = (EditText) findViewById(R.id.channel_name);
         String channel = v_channel.getText().toString();
         vSettings().mChannelName = channel;
@@ -124,5 +141,30 @@ public class MainActivity extends BaseActivity {
     public void forwardToSettings() {
         Intent i = new Intent(this, SettingsActivity.class);
         startActivity(i);
+    }
+
+    public void setAlias() {
+        final EditText editText = new EditText(MainActivity.this);
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle(R.string.set_alias)
+                .setView(editText)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String alias = editText.getText().toString().trim();
+                        if (TextUtils.isEmpty(alias)) return;
+                        AGApplication.setAlias(alias);
+                        updateAliasView(alias);
+                        //MiPushClient.setAlias(MainActivity.this, alias, null);
+                    }
+
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    private void updateAliasView(String alias) {
+        ((Button)findViewById(R.id.button_alias)).setText(alias);
     }
 }

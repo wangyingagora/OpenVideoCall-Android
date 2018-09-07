@@ -195,7 +195,7 @@ public class AGApplication extends Application {
         }
 
         mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mPlayer.setLooping(true);
+        mPlayer.setLooping(false);
         mPlayer.start();
     }
 
